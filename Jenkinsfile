@@ -8,24 +8,16 @@ pipeline {
   }
   stages {
     stage('Build') {
-      parallel {
-        stage('Compile') {
-          steps {
-            container('maven') {
-              sh 'mvn compile'
-            }
-          }
+      steps {
+        container('maven') {
+          sh 'mvn compile'
         }
       }
     }
     stage('Test') {
-      parallel {
-        stage('Unit Tests') {
-          steps {
-            container('maven') {
-              sh 'mvn test'
-            }
-          }
+      steps {
+        container('maven') {
+          sh 'mvn test'
         }
       }
     }
