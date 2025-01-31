@@ -44,7 +44,7 @@ pipeline {
               sh '''
                 /kaniko/executor -f `pwd`/Dockerfile -c `pwd` \
                 --insecure --skip-tls-verify --cache=true \
-                --destination=docker.io/xxxxxx/dso-demo
+                --destination=docker.io/anurag445/dso-demo
               '''
             }
           }
