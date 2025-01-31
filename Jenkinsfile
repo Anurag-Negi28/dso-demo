@@ -8,16 +8,24 @@ pipeline {
   }
   stages {
     stage('Build') {
-      steps {
-        container('maven') {
-          sh 'mvn compile'
+      parallel {
+        stage('Compile') {
+          steps {
+            container('maven') {
+              sh 'mvn compile'
+            }
+          }
         }
       }
     }
     stage('Test') {
-      steps {
-        container('maven') {
-          sh 'mvn test'
+      parallel {
+        stage('Unit Tests') {
+          steps {
+            container('maven') {
+              sh 'mvn test'
+            }
+          }
         }
       }
     }
@@ -33,18 +41,16 @@ pipeline {
         stage('OCI Image BnP') {
           steps {
             container('kaniko') {
-              sh '''
-                /kaniko/executor -f `pwd`/Dockerfile -c `pwd` \
-                --insecure --skip-tls-verify --cache=true \
-                --destination=docker.io/anurag445/dso-demo
-              '''
+              sh '/kaniko/executor -f `pwd`/Dockerfile -c `pwd` --insecure --skip-tls-verify --cache=true --destination=docker.io/anurag445/dso-demo'
             }
           }
         }
       }
     }
+
     stage('Deploy to Dev') {
       steps {
+        // TODO
         sh "echo done"
       }
     }
